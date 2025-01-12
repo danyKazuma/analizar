@@ -9,6 +9,8 @@ app.use(express.json()); // Parsear JSON en solicitudes
 app.post('/analizar', (req, res) => {
     const { urls } = req.body;
 
+    const size = response.headers['content-length'];
+
     if (!urls || !Array.isArray(urls)) {
         return res.status(400).json({ error: 'No se proporcionaron URLs o formato inválido' });
     }
@@ -25,7 +27,8 @@ app.post('/analizar', (req, res) => {
         const identificador = extractText(url);
         return identificador
             ? { url, identificador, status: 'Texto extraído correctamente' }
-            : { url, identificador: null, status: 'No se pudo extraer el texto' };
+            : { url, size, status: 'Peso del archivo' };
+            //: { url, identificador: null, status: 'No se pudo extraer el texto' };
     });
 
     // Devolver los resultados
