@@ -24,7 +24,7 @@ app.post('/analizar', async (req, res) => {
     // Función para obtener las propiedades de un archivo
     const obtenerArchivo = async (url) => {
         try {
-            const response = await axios.head(url); // Usamos HEAD para obtener solo los encabezados
+            const response = await axios.head(url, { timeout: 10000 }); // 10 segundos de tiempo de espera
             const size = response.headers['content-length']; // Obtener el tamaño desde los encabezados
 
             // Capturar el texto después de "Orders/" hasta el segundo "_"
