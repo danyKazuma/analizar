@@ -30,24 +30,22 @@ app.post('/analizar', async (req, res) => {
 
             const regex = /https:\/\/storage.googleapis.com\/liquidacionconvenios-prd\/Orders\/([^_]+_[^_]+)_/;
             const match = url.match(regex);
-            const identificador = match ? match[1] : "No identificado";
+            const documento = match ? match[1] : "No identificado";
 
             // Verificar si el archivo es corrupto
             const esCorrupto = sizeNumber === 32;
 
             return {
-                url,
                 size: size ? `${size} bytes` : "Tamaño no disponible",
-                identificador,
+                documento,
                 esCorrupto,
                 status: esCorrupto ? "Documento corrupto" : "Documento válido"
             };
         } catch (error) {
             console.error('Error al obtener el archivo:', error.message);
             return {
-                url,
                 size: "Error al obtener tamaño",
-                identificador: "No identificado",
+                documento: "No identificado",
                 esCorrupto: false,
                 status: "Error al procesar el documento",
                 error: error.message || "Error desconocido"
