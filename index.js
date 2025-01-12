@@ -26,18 +26,32 @@ app.post('/analizar', async (req, res) => {
         try {
             const response = await axios.head(url, { timeout: 10000 }); // 10 segundos de tiempo de espera
             const size = response.headers['content-length']; // Obtener el tamaño desde los encabezados
+            const sizeNumber = size ? parseInt(size, 10) : null; // Convertir a número
 
-            // Capturar el texto después de "Orders/" hasta el segundo "_"
             const regex = /https:\/\/storage.googleapis.com\/liquidacionconvenios-prd\/Orders\/([^_]+_[^_]+)_/;
             const match = url.match(regex);
+            const identificador = match ? match[1] : "No identificado";
 
-            // Capturar el documento extraído
-            const documento = match ? match[1] : "No identificado";
+            // Verificar si el archivo es corrupto
+            const esCorrupto = sizeNumber === 32;
 
-            return { size: size ? `${size} bytes` : "Tamaño no disponible", documento };
+            return {
+                url,
+                size: size ? `${size} bytes` : "Tamaño no disponible",
+                identificador,
+                esCorrupto,
+                status: esCorrupto ? "Documento corrupto" : "Documento válido"
+            };
         } catch (error) {
             console.error('Error al obtener el archivo:', error.message);
-            return { url, size: "Error al obtener tamaño", documento: "No identificado" };
+            return {
+                url,
+                size: "Error al obtener tamaño",
+                identificador: "No identificado",
+                esCorrupto: false,
+                status: "Error al procesar el documento",
+                error: error.message || "Error desconocido"
+            };
         }
     };
 
