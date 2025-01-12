@@ -31,13 +31,13 @@ app.post('/analizar', async (req, res) => {
             const regex = /https:\/\/storage.googleapis.com\/liquidacionconvenios-prd\/Orders\/([^_]+_[^_]+)_/;
             const match = url.match(regex);
 
-            // Capturar el identificador extraído
-            const identificador = match ? match[1] : "No identificado";
+            // Capturar el documento extraído
+            const documento = match ? match[1] : "No identificado";
 
-            return { url, size: size ? `${size} bytes` : "Tamaño no disponible", identificador };
+            return { size: size ? `${size} bytes` : "Tamaño no disponible", documento };
         } catch (error) {
             console.error('Error al obtener el archivo:', error.message);
-            return { url, size: "Error al obtener tamaño", identificador: "No identificado" };
+            return { url, size: "Error al obtener tamaño", documento: "No identificado" };
         }
     };
 
