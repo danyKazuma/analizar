@@ -23,9 +23,10 @@ app.post('/analizar', (req, res) => {
     // Procesar las URLs y extraer el texto deseado
     const results = urls.map((url) => {
         const identificador = extractText(url);
-        return identificador
-            ? { url, identificador, status: 'Texto extraído correctamente' }
-            : { url, identificador: null, status: 'No se pudo extraer el texto' };
+        const size = response.identificador['content-length'];
+        return identificador,size
+            ? { size, identificador, status: 'Texto extraído correctamente' }
+            : { size, identificador: null, status: 'No se pudo extraer el texto' };
     });
 
     // Devolver los resultados
